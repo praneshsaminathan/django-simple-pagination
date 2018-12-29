@@ -1,0 +1,49 @@
+{% if pagination_info.has_other_pages %}
+<nav>
+    <ul class="pagination">
+        {% if pagination_info.has_previous %}
+            {% if pagination_info.num_pages and pagination_info.num_pages > 3 %}
+                {% if pagination_info.number > 2 %}
+                    <li><a onclick='navigatePageWithUrlParameters(1)' class="pageNavigation page-link g-color-primary">Go to First</a></li>
+                {% endif %}
+            {% endif%}
+            <li><a onclick='navigatePageWithUrlParameters("{{ pagination_info.previous_page_number }}")' class="pageNavigation page-link g-color-primary">&laquo;</a></li>
+        {% else %}
+            <li class="disabled"><a class="pageNavigation page-link g-color-primary">&laquo;</a></li>
+        {% endif %}
+        {% if pagination_info.num_pages and pagination_info.num_pages > 3 %}
+            {% if pagination_info.number > 2 %}
+                <li><a>.....</a></li>
+            {% endif %}
+        {% endif %}
+        <li class="page-item active"><a class="page-link g-color-primary">{{ pagination_info.number }}</a></li>
+        {% if pagination_info.has_next %}
+            {% if pagination_info.next_page_number != pagination_info.num_pages %}
+                <li><a onclick='navigatePageWithUrlParameters("{{ pagination_info.next_page_number }}")' class="pageNavigation page-link g-color-primary">&raquo;</a></li>
+            {% elif pagination_info.num_pages == 2 %}
+                <li><a onclick='navigatePageWithUrlParameters("{{ pagination_info.next_page_number }}")' class="pageNavigation page-link g-color-primary">{{ pagination_info.next_page_number }}</a></li>
+            {% endif %}
+        {% endif %}
+        {% if pagination_info.num_pages and pagination_info.num_pages > 2 %}
+            {% if pagination_info.number != pagination_info.num_pages %}
+                <li><a>.....</a></li>
+                <li><a onclick='navigatePageWithUrlParameters("{{ pagination_info.num_pages }}")' class="pageNavigation page-link g-color-primary">Go to Last({{ pagination_info.num_pages }})</a></li>
+            {% endif %}
+        {% endif %}
+    </ul>
+</nav>
+{%endif%}
+
+{% block extrascripts%}
+<script type="text/javascript">
+    function navigatePageWithUrlParameters(page) {
+        'use strict';
+        var query = $('#search_query').val();
+        var location = window.location.pathname + '?page=' + page;
+        if (!(query === '') && !(query === undefined)) {
+            location += '&q=' + query;
+        }
+        window.location.href = location;
+    }
+</script>
+{% endblock %}
